@@ -20,6 +20,10 @@ def main():
     st.sidebar.subheader("Your Happiness Percentage")
     user_happiness = st.sidebar.slider("On a scale from 1 to 100, how happy are you?", min_value=1, max_value=100)
     
+    # Calculate the user's relative rank based on their happiness percentage
+    max_happiness = data["Score"].max()
+    user_rank = data[data["Score"] <= (user_happiness / 100) * max_happiness].shape[0] + 1
+    
     st.subheader("Visualization 1: World Happiness Map")
     st.write("This map shows the happiness scores of different countries on the world map.")
     
@@ -50,14 +54,15 @@ def main():
 
     st.sidebar.subheader("Find Similar Happiness Country")
     st.write("See which country in the World Happiness Report is most similar to your happiness percentage.")
-    
+
     # Calculate the absolute difference between user's happiness and each country's happiness
     data["Difference"] = abs(data["Score"] - (user_happiness / 100))
-    
+
     # Find the country with the smallest difference
     similar_country = data.loc[data["Difference"].idxmin()]["Country or region"]
-    
+
     st.sidebar.write(f"You are similar in happiness to the population of {similar_country} in the World Happiness Report.")
+    st.sidebar.write(f"Your rank relative to the World Happiness Report: {user_rank} out of 156 countries.")
 
 if __name__ == "__main__":
     main()
