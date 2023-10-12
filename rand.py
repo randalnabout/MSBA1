@@ -34,7 +34,11 @@ def main():
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
-    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False)
+    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))
+
+    # Customize the hover effect to highlight the country
+    fig5.update_traces(marker=dict(line=dict(width=2, color='DarkSlateGrey')),
+                      selector=dict(mode='markers+text'))
 
     st.plotly_chart(fig5)
 
