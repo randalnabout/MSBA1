@@ -15,8 +15,10 @@ def main():
     st.write("Welcome to the World Happiness Report app. This app visualizes data from the 2019 World Happiness Report.")
     st.write("You can explore the happiness scores, GDP per capita, and more by placing the mouse on the country of interest.")
 
-    st.subheader("Visualization 1: World Happiness Map")
-    st.write("This map shows the happiness scores of different countries on the world map.")
+    st.sidebar.title("Map Layers")  # Moved the sidebar title here
+
+    st.sidebar.subheader("Visualization 1: World Happiness Map")
+    st.sidebar.write("This map shows the happiness scores of different countries on the world map.")
     
     # Create a sidebar for the control panel
     with st.sidebar:
@@ -50,17 +52,17 @@ def main():
 
     st.plotly_chart(fig6)
 
-    st.subheader("Find Country by Rank")
-    st.write("Enter a rank to find the corresponding country:")
-    rank = st.number_input("Enter a Rank", min_value=1, max_value=data["Overall rank"].max())
+    st.sidebar.subheader("Find Country by Rank")
+    st.sidebar.write("Enter a rank to find the corresponding country:")
+    rank = st.sidebar.number_input("Enter a Rank", min_value=1, max_value=data["Overall rank"].max())
     
-    if st.button("Find Country"):
+    if st.sidebar.button("Find Country"):
         selected_data = data[data["Overall rank"] == rank]
         if not selected_data.empty:
             country = selected_data.iloc[0]["Country or region"]
-            st.write(f"Country at Rank {rank}: {country}")
+            st.sidebar.write(f"Country at Rank {rank}: {country}")
         else:
-            st.write(f"No country found at Rank {rank}")
+            st.sidebar.write(f"No country found at Rank {rank}")
 
 if __name__ == "__main__":
     main()
