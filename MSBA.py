@@ -23,7 +23,7 @@ def main():
     filtered_data = data[(data['Score'] >= min_score) & (data['Score'] <= max_score)
 
     # World Happiness Map
-    st.write("This map displays happiness scores and GDP per capita by country.")
+    fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
     
     fig5 = px.scatter_geo(filtered_data,
                          locations="Country or region",
