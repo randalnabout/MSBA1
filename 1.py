@@ -31,7 +31,10 @@ def main():
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
-    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False)
+    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))  # Add a closing parenthesis here
+
+    st.plotly_chart(fig5)
+ 
 
     st.plotly_chart(fig5)
 
