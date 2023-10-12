@@ -37,15 +37,17 @@ def main():
     st.dataframe(filtered_data)
 
     st.subheader("Visualization 1: World Happiness Map")
-    st.write("This map shows the happiness scores of different countries on the world map.")
-    fig5 = px.scatter_geo(filtered_data,  # Use filtered data
+    st.write("This map shows the happiness scores of different countries on the world map. Hover over countries to see details.")
+
+    fig5 = px.scatter_geo(filtered_data,
                          locations="Country or region",
                          locationmode="country names",
                          color="Score",
                          hover_name="Country or region",
                          size="GDP per capita",
                          projection="natural earth",
-                         title="World Happiness Report")
+                         title="World Happiness Report",
+                         hover_data={"Country or region": True, "Score": ":.2f", "GDP per capita": ":.2f"})
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
@@ -73,3 +75,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
