@@ -17,10 +17,12 @@ def main():
 
     st.subheader("Visualization 1: World Happiness Map")
     st.write("This map shows the happiness scores of different countries on the world map.")
-
-    # Interactive widget to select the column for color coding
-    color_column = st.selectbox("Select a Column for Color Coding", data.columns[2:])
     
+    # Create a sidebar for the control panel
+    with st.sidebar:
+        # Interactive widget to select the column for color coding
+        color_column = st.selectbox("Select a Column for Color Coding", data.columns[2:])
+
     fig5 = px.scatter_geo(data,
                          locations="Country or region",
                          locationmode="country names",
@@ -32,7 +34,7 @@ def main():
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
-    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))
+    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False)
 
     st.plotly_chart(fig5)
 
@@ -58,4 +60,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
