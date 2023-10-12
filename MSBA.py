@@ -23,7 +23,7 @@ def main():
     filtered_data = data[(data['Score'] >= min_score) & (data['Score'] <= max_score)
 
     # World Happiness Map
-    st.subheader("Visualization 1: World Happiness Map")
+    fig6.update_layout(xaxis=dict(range=[1.2, 1.6]), yaxis=dict(range=[2, 8]))
     st.write("This map displays happiness scores and GDP per capita by country.")
     
     fig5 = px.scatter_geo(filtered_data,
