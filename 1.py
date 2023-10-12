@@ -48,6 +48,8 @@ def main():
     fig6.update_layout(xaxis=dict(range=[1.2, 1.6]), yaxis=dict(range=[2, 8]))
 
     st.plotly_chart(fig6)
+    
+    st.subheader("First smile. WHAT IS COMING IS BETTER THAN WHAT IS GONE!")
 
     st.subheader("Find a Country Matching Your Happiness Score")
     user_happiness_score = st.number_input("Enter your happiness score (0-10):", min_value=0.0, max_value=10.0, step=0.1)
