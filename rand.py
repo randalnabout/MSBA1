@@ -15,7 +15,19 @@ def main():
     st.write("Welcome to the World Happiness Report app. This app visualizes data from the 2019 World Happiness Report.")
     st.write("You can explore the happiness scores, GDP per capita, and more by placing the mouse on the country of interest.")
 
-    # Modify Figure 5
+    # Apply filters to your data
+    selected_region = st.selectbox("Select a Region", data["Region"].unique())
+    min_score = st.slider("Minimum Happiness Score", min_value=data["Score"].min(), max_value=data["Score"].max())
+    max_score = st.slider("Maximum Happiness Score", min_value=min_score, max_value=data["Score"].max())
+    min_gdp = st.slider("Minimum GDP per Capita", min_value=data["GDP per capita"].min(), max_value=data["GDP per capita"].max())
+    max_gdp = st.slider("Maximum GDP per Capita", min_value=min_gdp, max_value=data["GDP per capita"].max())
+
+    filtered_data = data[(data["Region"] == selected_region) &
+                        (data["Score"] >= min_score) & (data["Score"] <= max_score) &
+                        (data["GDP per capita"] >= min_gdp) & (data["GDP per capita"] <= max_gdp)]
+
+    # Continue with the rest of your code
+
     st.subheader("Visualization 1: World Happiness Map")
     st.write("This map shows the happiness scores of different countries on the world map. Hover over countries to see details.")
 
