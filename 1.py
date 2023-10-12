@@ -25,11 +25,13 @@ def main():
                          hover_data=["Score", "GDP per capita"],  # Add additional data for hovering
                          size="GDP per capita",
                          projection="natural earth",
-                         title="World Happiness Report")
+                         title="World Happiness Report",
+                         color_continuous_scale=px.colors.sequential.Plasma,  # Set the color scale
+                         range_color=(0, 10))  # Set the color scale range
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
-    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))
+    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False)
 
     st.plotly_chart(fig5)
 
@@ -41,17 +43,12 @@ def main():
 
     st.plotly_chart(fig6)
 
-    st.subheader("Find Country by Rank")
-    st.write("Enter a rank to find the corresponding country:")
-    rank = st.number_input("Enter a Rank", min_value=1, max_value=data["Overall rank"].max())
-    
-    if st.button("Find Country"):
-        selected_data = data[data["Overall rank"] == rank]
-        if not selected_data.empty:
-            country = selected_data.iloc[0]["Country or region"]
-            st.write(f"Country at Rank {rank}: {country}")
-        else:
-            st.write(f"No country found at Rank {rank}")
+    st.subheader("Find a Country Matching Your Happiness Score")
+    user_happiness_score = st.number_input("Enter your happiness score (0-10):", min_value=0.0, max_value=10.0, step=0.1)
+
+    if st.button("Find Matching Country"):
+        closest_country = data.iloc[(data['Score'] - user_happiness_score).abs().argsort()[:1]]
+        st.write(f"The closest matching country to your happiness score of {user_happiness_score} is: {closest_country['Country or region'].values[0]}")
 
 if __name__ == "__main__":
     main()
