@@ -11,7 +11,7 @@ data = pd.read_csv(DATA_URL)
 def main():
     st.title("World Happiness Report")
 
-    st.header("Introduction")
+    st.header("Hello! This page is part of an assignment for MSBA 325. Data visualization.")
     st.write("Welcome to the World Happiness Report app. This app visualizes data from the 2019 World Happiness Report.")
     st.write("You can explore the happiness scores, GDP per capita, and more by placing the mouse on the country of interest.")
 
@@ -63,6 +63,22 @@ def main():
             st.sidebar.write(f"Country at Rank {rank}: {country}")
         else:
             st.sidebar.write(f"No country found at Rank {rank}")
+
+    st.header("Your Happiness Rank")
+    st.write("Please enter your happiness rank on a scale of 1-10:")
+    user_rank = st.number_input("Enter Your Rank", min_value=1, max_value=10)
+    
+    if st.button("See Your Rank Compared to World Happiness"):
+        st.subheader("Your Happiness Rank Compared to World Happiness Report")
+        st.write(f"Your happiness rank: {user_rank}")
+        st.write(f"World Happiness Report rank: {rank}")
+        if user_rank > rank:
+            st.write("You are happier than the country at this rank.")
+        elif user_rank < rank:
+            st.write("You are less happy than the country at this rank.")
+        else:
+            st.write("You are equally happy as the country at this rank.")
+
 
 if __name__ == "__main__":
     main()
