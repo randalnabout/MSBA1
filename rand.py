@@ -17,56 +17,33 @@ def main():
 
     # Modify Figure 5
 st.subheader("Visualization 1: World Happiness Map")
-st.write("This map shows the happiness scores of different countries on the world map.")
+st.write("This map shows the happiness scores of different countries on the world map. Hover over countries to see details.")
 
-# Custom color scale and colorbar
-fig5.update_traces(marker=dict(colorbar=dict(title="Happiness Score"), colorscale="Viridis"))
+fig5 = px.scatter_geo(filtered_data,
+                     locations="Country or region",
+                     locationmode="country names",
+                     color="Score",
+                     hover_name="Country or region",
+                     size="GDP per capita",
+                     projection="natural earth",
+                     title="World Happiness Report",
+                     hover_data={"Country or region": True, "Score": ":.2f", "GDP per capita": ":.2f"})
 
-# Zoom and pan controls
-fig5.update_geos(
-    visible=False, 
-    showcoastlines=True, coastlinecolor="Black", 
-    showland=True, landcolor="white", 
-    showocean=True, oceancolor="lightblue",
-    projection_scale=5  # Adjust the scale factor for zoom
-)
+fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
-# Filtering by happiness score range
-st.sidebar.subheader("Filter by Happiness Score Range")
-min_score = st.sidebar.slider("Minimum Score", min_value=0, max_value=10, value=0)
-max_score = st.sidebar.slider("Maximum Score", min_value=0, max_value=10, value=10)
+fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))
 
-filtered_data = data[(data["Score"] >= min_score) & (data["Score"] <= max_score)]
-filtered_fig5 = px.scatter_geo(
-    filtered_data,
-    locations="Country or region",
-    locationmode="country names",
-    color="Score",
-    hover_name="Country or region",
-    size="GDP per capita",
-    projection="natural earth",
-    title="World Happiness Report (Filtered)",
-    color_continuous_scale="Viridis"
-)
+st.plotly_chart(fig5)
 
-filtered_fig5.update_geos(
-    visible=False,
-    showcoastlines=True, coastlinecolor="Black",
-    showland=True, landcolor="white",
-    showocean=True, oceancolor="lightblue",
-    projection_scale=5  # Adjust the scale factor for zoom
-)
+# ...
 
-st.plotly_chart(filtered_fig5)
+fig6 = px.scatter(data_frame=filtered_data, x="GDP per capita", y="Score", animation_frame="Overall rank",
+                 size="Score", color="Country or region", hover_name="Country or region",
+                 title="Happiness Score vs. GDP per Capita (All Countries)")
 
+fig6.update_layout(xaxis=dict(range=[1.2, 1.6]), yaxis=dict(range=[2, 8]))
 
-    fig6 = px.scatter(data_frame=data, x="GDP per capita", y="Score", animation_frame="Overall rank",
-                     size="Score", color="Country or region", hover_name="Country or region",
-                     title="Happiness Score vs. GDP per Capita (All Countries)")
-
-    fig6.update_layout(xaxis=dict(range=[1.2, 1.6]), yaxis=dict(range=[2, 8]))
-
-    st.plotly_chart(fig6)
+st.plotly_chart(fig6)
 
     st.subheader("Find Country by Rank")
     st.write("Enter a rank to find the corresponding country:")
