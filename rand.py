@@ -15,31 +15,20 @@ def main():
     st.write("Welcome to the World Happiness Report app. This app visualizes data from the 2019 World Happiness Report.")
     st.write("You can explore the happiness scores, GDP per capita, and more by placing the mouse on the country of interest.")
 
-    # Apply filters to your data
-    selected_region = st.selectbox("Select a Region", data["Region"].unique())
-    min_score = st.slider("Minimum Happiness Score", min_value=data["Score"].min(), max_value=data["Score"].max())
-    max_score = st.slider("Maximum Happiness Score", min_value=min_score, max_value=data["Score"].max())
-    min_gdp = st.slider("Minimum GDP per Capita", min_value=data["GDP per capita"].min(), max_value=data["GDP per capita"].max())
-    max_gdp = st.slider("Maximum GDP per Capita", min_value=min_gdp, max_value=data["GDP per capita"].max())
-
-    filtered_data = data[(data["Region"] == selected_region) &
-                        (data["Score"] >= min_score) & (data["Score"] <= max_score) &
-                        (data["GDP per capita"] >= min_gdp) & (data["GDP per capita"] <= max_gdp)]
-
-    # Continue with the rest of your code
-
     st.subheader("Visualization 1: World Happiness Map")
-    st.write("This map shows the happiness scores of different countries on the world map. Hover over countries to see details.")
+    st.write("This map shows the happiness scores of different countries on the world map.")
 
-    fig5 = px.scatter_geo(filtered_data,
+    # Interactive widget to select the column for color coding
+    color_column = st.selectbox("Select a Column for Color Coding", data.columns[2:])
+    
+    fig5 = px.scatter_geo(data,
                          locations="Country or region",
                          locationmode="country names",
-                         color="Score",
+                         color=color_column,  # Color based on user selection
                          hover_name="Country or region",
                          size="GDP per capita",
                          projection="natural earth",
-                         title="World Happiness Report",
-                         hover_data={"Country or region": True, "Score": ":.2f", "GDP per capita": ":.2f"})
+                         title="World Happiness Report")
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
 
@@ -47,9 +36,7 @@ def main():
 
     st.plotly_chart(fig5)
 
-    # ...
-
-    fig6 = px.scatter(data_frame=filtered_data, x="GDP per capita", y="Score", animation_frame="Overall rank",
+    fig6 = px.scatter(data_frame=data, x="GDP per capita", y="Score", animation_frame="Overall rank",
                      size="Score", color="Country or region", hover_name="Country or region",
                      title="Happiness Score vs. GDP per Capita (All Countries)")
 
@@ -60,7 +47,7 @@ def main():
     st.subheader("Find Country by Rank")
     st.write("Enter a rank to find the corresponding country:")
     rank = st.number_input("Enter a Rank", min_value=1, max_value=data["Overall rank"].max())
-
+    
     if st.button("Find Country"):
         selected_data = data[data["Overall rank"] == rank]
         if not selected_data.empty:
@@ -71,3 +58,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
