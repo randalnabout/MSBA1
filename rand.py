@@ -15,63 +15,70 @@ def main():
     st.write("Welcome to the World Happiness Report app. This app visualizes data from the 2019 World Happiness Report.")
     st.write("You can explore the happiness scores, GDP per capita, and more by placing the mouse on the country of interest.")
 
-    st.subheader("Data Exploration")
+    # Modify Figure 5
+st.subheader("Visualization 1: World Happiness Map")
+st.write("This map shows the happiness scores of different countries on the world map.")
 
-    # Filter by region
-    selected_region = st.selectbox("Select a Region", data["Region"].unique())
+# Custom color scale and colorbar
+fig5.update_traces(marker=dict(colorbar=dict(title="Happiness Score"), colorscale="Viridis"))
 
-    # Filter by happiness score range
-    min_score = st.slider("Minimum Happiness Score", min_value=data["Score"].min(), max_value=data["Score"].max())
-    max_score = st.slider("Maximum Happiness Score", min_value=min_score, max_value=data["Score"].max())
+# Zoom and pan controls
+fig5.update_geos(
+    visible=False, 
+    showcoastlines=True, coastlinecolor="Black", 
+    showland=True, landcolor="white", 
+    showocean=True, oceancolor="lightblue",
+    projection_scale=5  # Adjust the scale factor for zoom
+)
 
-    # Filter by GDP per capita range
-    min_gdp = st.slider("Minimum GDP per Capita", min_value=data["GDP per capita"].min(), max_value=data["GDP per capita"].max())
-    max_gdp = st.slider("Maximum GDP per Capita", min_value=min_gdp, max_value=data["GDP per capita"].max())
+# Filtering by happiness score range
+st.sidebar.subheader("Filter by Happiness Score Range")
+min_score = st.sidebar.slider("Minimum Score", min_value=0, max_value=10, value=0)
+max_score = st.sidebar.slider("Maximum Score", min_value=0, max_value=10, value=10)
 
-    # Apply the selected filters to the data
-    filtered_data = data[(data["Region"] == selected_region) &
-                        (data["Score"] >= min_score) & (data["Score"] <= max_score) &
-                        (data["GDP per capita"] >= min_gdp) & (data["GDP per capita"] <= max_gdp)]
+filtered_data = data[(data["Score"] >= min_score) & (data["Score"] <= max_score)]
+filtered_fig5 = px.scatter_geo(
+    filtered_data,
+    locations="Country or region",
+    locationmode="country names",
+    color="Score",
+    hover_name="Country or region",
+    size="GDP per capita",
+    projection="natural earth",
+    title="World Happiness Report (Filtered)",
+    color_continuous_scale="Viridis"
+)
 
-    st.write("Filtered Data:")
-    st.dataframe(filtered_data)
+filtered_fig5.update_geos(
+    visible=False,
+    showcoastlines=True, coastlinecolor="Black",
+    showland=True, landcolor="white",
+    showocean=True, oceancolor="lightblue",
+    projection_scale=5  # Adjust the scale factor for zoom
+)
 
-    st.subheader("Visualization 1: World Happiness Map")
-    st.write("This map shows the happiness scores of different countries on the world map. Hover over countries to see details.")
+st.plotly_chart(filtered_fig5)
 
-    fig5 = px.scatter_geo(filtered_data,
-                         locations="Country or region",
-                         locationmode="country names",
-                         color="Score",
-                         hover_name="Country or region",
-                         size="GDP per capita",
-                         projection="natural earth",
-                         title="World Happiness Report",
-                         hover_data={"Country or region": True, "Score": ":.2f", "GDP per capita": ":.2f"})
 
-    fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
+    fig6 = px.scatter(data_frame=data, x="GDP per capita", y="Score", animation_frame="Overall rank",
+                     size="Score", color="Country or region", hover_name="Country or region",
+                     title="Happiness Score vs. GDP per Capita (All Countries)")
 
-    fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))
+    fig6.update_layout(xaxis=dict(range=[1.2, 1.6]), yaxis=dict(range=[2, 8]))
 
-    st.plotly_chart(fig5)
+    st.plotly_chart(fig6)
 
-    # Visualization Customization
-    st.subheader("Visualization Customization")
-    st.write("Customize the chart:")
+    st.subheader("Find Country by Rank")
+    st.write("Enter a rank to find the corresponding country:")
+    rank = st.number_input("Enter a Rank", min_value=1, max_value=data["Overall rank"].max())
     
-    chart_type = st.selectbox("Select Chart Type", ["Scatter Plot", "Bar Chart", "Line Chart"])
-   
-    if chart_type == "Scatter Plot":
-        # Display the scatter plot
-        fig = px.scatter(filtered_data, x="GDP per capita", y="Score", title="Scatter Plot")
-    elif chart_type == "Bar Chart":
-        # Display the bar chart
-        fig = px.bar(filtered_data, x="Country or region", y="Score", title="Bar Chart")
-    else:
-        # Display the line chart
-        fig = px.line(filtered_data, x="Country or region", y="GDP per capita", title="Line Chart")
-
-    st.plotly_chart(fig)
+    if st.button("Find Country"):
+        selected_data = data[data["Overall rank"] == rank]
+        if not selected_data.empty:
+            country = selected_data.iloc[0]["Country or region"]
+            st.write(f"Country at Rank {rank}: {country}")
+        else:
+            st.write(f"No country found at Rank {rank}.")
 
 if __name__ == "__main__":
     main()
