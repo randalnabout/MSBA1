@@ -22,24 +22,25 @@ def main():
 
     filtered_data = data[(data['Score'] >= min_score) & (data['Score'] <= max_score)
 
-    # World Happiness Map
-    fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
-    
-    fig5 = px.scatter_geo(filtered_data,
-                         locations="Country or region",
-                         locationmode="country names",
-                         color="Score",
-                         hover_name="Country or region",
-                         hover_data=["Score", "GDP per capita"],
-                         size="GDP per capita",
-                         projection="natural earth",
-                         title="World Happiness Report",
-                         color_continuous_scale=px.colors.sequential.Plasma,
-                         range_color=(0, 10))
+   # World Happiness Map
+   st.write("This map displays happiness scores and GDP per capita by country.")
+
+   fig5 = px.scatter_geo(filtered_data,
+                     locations="Country or region",
+                     locationmode="country names",
+                     color="Score",
+                     hover_name="Country or region",
+                     hover_data=["Score", "GDP per capita"],
+                     size="GDP per capita",
+                     projection="natural earth",
+                     title="World Happiness Report",
+                     color_continuous_scale=px.colors.sequential.Plasma,
+                     range_color=(0, 10))
 
     fig5.update_geos(showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="white", showocean=True, oceancolor="lightblue")
     fig5.update_layout(geo=dict(showframe=False, showcoastlines=False))
 
+ 
     st.plotly_chart(fig5)
 
     # Happiness Score vs. GDP per Capita
