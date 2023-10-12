@@ -11,7 +11,7 @@ data = pd.read_csv(DATA_URL)
 def main():
     st.title("World Happiness Report")
 
-    st.header("Introduction")
+    st.header("This page is part of my assignment for MSBA 325. First smile to continue.")
     st.write("Welcome to the World Happiness Report app. This app visualizes data from the 2019 World Happiness Report.")
     st.write("You can explore the happiness scores, GDP per capita, and more by placing the mouse on the country of interest.")
 
